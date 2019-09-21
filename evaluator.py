@@ -27,28 +27,28 @@ def my_eval(x, env):
     elif x[0] == 'if': 
         (_, test, conseq, alt) = x
 
-        return eval((conseq if eval(test, env) else alt), env)
+        return my_eval((conseq if my_eval(test, env) else alt), env)
 
     # (set! var exp)
     elif x[0] == 'set!': 
         (_, var, exp) = x
-        env.find(var)[var] = eval(exp, env)
+        env.find(var)[var] = my_eval(exp, env)
 
     # (define var exp)
     elif x[0] == 'define':
         (_, var, exp) = x
-        env[var] = eval(exp, env)
+        env[var] = my_eval(exp, env)
 
     # (lambda (var*) exp)
     elif x[0] == 'lambda': 
         (_, vars, exp) = x
 
-        return lambda *args: eval(exp, Env(vars, args, env))
+        return lambda *args: my_eval(exp, Env(vars, args, env))
 
     # (begin exp*)
     elif x[0] == 'begin': 
         for exp in x[1:]:
-            val = eval(exp, env)
+            val = my_eval(exp, env)
 
         return val
 
