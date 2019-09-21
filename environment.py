@@ -4,13 +4,16 @@ import operator as op
 
 
 class Env(dict):
-    def __init__(self, parms=(), args=(), outer=None):
-        self.update(zip(parms,args))
+    def __init__(self, parms=(), args=(), outer=dict):
+        self.update(zip(parms, args))
         self.outer = outer
 
     def find(self, var):
+        if var in self:
+            return self
 
-        return self if var in self else self.outer.find(var)
+        else:
+            return self.outer
 
     
 def add_globals(env):
@@ -34,9 +37,9 @@ def add_globals(env):
         'cdr':lambda x: x[1:],
         'append':op.add,
         'list':lambda *x: list(x),
-        'list?': lambda x: isa(x,list),
+        'list?': lambda x: isinstance(x,list),
         'null?':lambda x: x == [],
-        'symbol?':lambda x: isa(x, Symbol)
+        'symbol?':lambda x: isinstance(x, str)
     })
     
     return env

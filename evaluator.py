@@ -1,19 +1,16 @@
 from environment import Env
 from environment import add_globals
 
-global_env = add_globals(Env())
-Symbol = str
-isa = isinstance
 
 
 def my_eval(x, env):
     # Check symbol ?
-    if isa(x, Symbol):
+    if isinstance(x, str):
 
         return env.find(x)[x]
 
     # Check list ?
-    elif not isa(x, list):
+    elif not isinstance(x, list):
 
         return x                
 
@@ -27,7 +24,12 @@ def my_eval(x, env):
     elif x[0] == 'if': 
         (_, test, conseq, alt) = x
 
-        return my_eval((conseq if my_eval(test, env) else alt), env)
+        if my_eval(test, env):
+            return my_eval(conseq, env)
+
+        else:
+            return my_eval(alt, env)
+
 
     # (set! var exp)
     elif x[0] == 'set!': 

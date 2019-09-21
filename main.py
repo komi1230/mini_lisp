@@ -21,9 +21,19 @@ global_env = add_globals(Env())
 def repl(prompt='>>> '):
 
     while True:
-        val = my_eval(parse(input(prompt)), env=global_env)
+        input_seq = input(prompt)
+
+        if input_seq is "":
+            continue
+
+        parsed_seq = parse(input_seq)
+        print("Parsed seq : ", parsed_seq)
+        val = my_eval(parsed_seq, env=global_env)
+        print("Evaluation : ", val)
         if val is not None:
             print(to_string(val))
+        else:
+            continue
 
 
 if __name__ == "__main__":

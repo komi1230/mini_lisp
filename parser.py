@@ -1,21 +1,13 @@
-Symbol = str
-isa = isinstance
-
-
-def parse(s):
-
-    return read_from(tokenize(s))
-
-
 def tokenize(s):
 
-    return s.replace('(',' ( ').replace(')',' ) ').split()
+    return s.replace('(', ' ( ').replace(')', ' ) ').split()
 
 
 def read_from(tokens):
 
     if len(tokens) == 0:
         raise SyntaxError('unexpected EOF while reading')
+
     token = tokens.pop(0)
 
     if '(' == token:
@@ -31,6 +23,11 @@ def read_from(tokens):
 
     else:
         return atom(token)
+    
+
+def parse(s):
+
+    return read_from(tokenize(s))
 
     
 def atom(token):
@@ -42,9 +39,12 @@ def atom(token):
             return float(token)
 
         except ValueError:
-            return Symbol(token)
+            return str(token)
 
         
 def to_string(exp):
+    if isinstance(exp, list):
+        return  '('+' '.join(map(to_string, exp))+')'
 
-    return '('+' '.join(map(to_string, exp))+')' if isa(exp, list) else str(exp)
+    else:
+        return str(exp)
