@@ -4,8 +4,10 @@ from environment import add_globals
 
 
 def check_string(x):
-    return x[0] == x[-1] == '"' or not '"' in x[1:-2]
-
+    if isinstance(x, str):
+        return x[0] == x[-1] == '"' or not '"' in x[1:-2]
+    else:
+        return False
 
 def my_eval(x, env):
     print("Here x is : ", x)
