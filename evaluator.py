@@ -1,9 +1,11 @@
+import sys
 from environment import Env
 from environment import add_globals
 
 
 
 def my_eval(x, env):
+    print("Here x is : ", x)
     # Check symbol ?
     if isinstance(x, str):
 
@@ -46,6 +48,9 @@ def my_eval(x, env):
         (_, vars, exp) = x
 
         return lambda *args: my_eval(exp, Env(vars, args, env))
+
+    elif x[0] == 'exit':
+        sys.exit("bye")
 
     # (begin exp*)
     elif x[0] == 'begin': 
