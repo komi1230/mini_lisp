@@ -3,9 +3,13 @@ from environment import Env
 from environment import add_globals
 
 
+def check_string(x):
+    return x[0] == x[-1] == '"' or not '"' in x[1:-2]
+
 
 def my_eval(x, env):
     print("Here x is : ", x)
+
     # Check symbol ?
     if isinstance(x, str):
 
@@ -41,7 +45,10 @@ def my_eval(x, env):
     # (define var exp)
     elif x[0] == 'define':
         (_, var, exp) = x
-        env[var] = my_eval(exp, env)
+        if check_string(exp):
+            env[var] = exp
+        else:
+            env[var] = my_eval(exp, env)
 
     # (lambda (var*) exp)
     elif x[0] == 'lambda': 
@@ -49,6 +56,7 @@ def my_eval(x, env):
 
         return lambda *args: my_eval(exp, Env(vars, args, env))
 
+    # (exit)
     elif x[0] == 'exit':
         sys.exit("bye")
 
