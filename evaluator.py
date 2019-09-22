@@ -10,14 +10,13 @@ def check_string(x):
         return False
 
 def my_eval(x, env):
-    print("Here x is : ", x)
 
     # Check symbol ?
     if isinstance(x, str):
 
         return env.find(x)[x]
 
-    # Check list ?
+    # Check atom ?
     elif not isinstance(x, list):
 
         return x                

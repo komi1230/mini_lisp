@@ -1,5 +1,5 @@
 from __future__ import division
-import math
+import math, sys, os
 import operator as op
 
 from environment import Env
@@ -15,26 +15,49 @@ from parser import (
 
 
 
-global_env = add_globals(Env())
+GLOBAL_ENV = add_globals(Env())
 
+if "-d" in sys.argv:
+    DEBUG_MODE = True
+else:
+    DEBUG_MODE = False
 
-def repl(prompt='>>> '):
+    
 
-    while True:
-        input_seq = input(prompt)
+def repl(prompt='>>> ', debug=False):
 
-        if input_seq is "":
-            continue
+    if debug:
+        while True:
+            input_seq = input(prompt)
 
-        parsed_seq = parse(input_seq)
-        print("Parsed seq : ", parsed_seq)
-        val = my_eval(parsed_seq, env=global_env)
-        print("Evaluation : ", val)
-        if val is not None:
-            print(to_string(val))
-        else:
-            continue
+            if input_seq is "":
+                continue
+
+            parsed_seq = parse(input_seq)
+            print("Parsed seq : ", parsed_seq)
+            val = my_eval(parsed_seq, env=GLOBAL_ENV)
+            print("Evaluation : ", val)
+
+            if val is not None:
+                 print(to_string(val))
+            else:
+                 continue
+
+    else:
+        while True:
+            input_seq = input(prompt)
+
+            if input_seq is "":
+                continue
+
+            parsed_seq = parse(input_seq)
+            val = my_eval(parsed_seq, env=GLOBAL_ENV)
+
+            if val is not None:
+                 print(to_string(val))
+            else:
+                 continue
 
 
 if __name__ == "__main__":
-    repl()
+    repl(debug=DEBUG_MODE)
